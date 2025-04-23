@@ -10,7 +10,7 @@ spec:
     - host: npvet.local
       http:
         paths:
-          - path: /api(/|$)(.*)
+          - path: /npvet-api(/|$)(.*)
             pathType: Prefix
             backend:
               service:
