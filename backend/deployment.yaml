@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: npvet-backend-deployment
+  namespace: npvet-k8s
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: npvet-backend
+  template:
+    metadata:
+      labels:
+        app: npvet-backend
+    spec:
+      containers:
+        - name: npvet-backend
+          image: ghcr.io/orbitechz/npvet-backend-cloud:latest
+          ports:
+            - containerPort: 8090
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+            - secretRef:
+                name: postgres-secrets
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8090
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
