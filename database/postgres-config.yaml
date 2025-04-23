@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: npvet-k8s
+data:
+  DB_NOME: npvet
+  DB_HOST: localhost
+  DB_PORT: "5432"
+  DDL: create
+  API_PORT: "8080"
+  CLIENT_ID: npvet-api
