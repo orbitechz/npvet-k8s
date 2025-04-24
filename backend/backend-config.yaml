@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-config
+  name: backend-config
   namespace: npvet-k8s
 data:
   DB_NOME: npvet

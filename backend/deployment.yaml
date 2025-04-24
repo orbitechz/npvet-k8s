@@ -20,9 +20,9 @@ spec:
             - containerPort: 8090
           envFrom:
             - configMapRef:
-                name: postgres-config
+                name: backend-config
             - secretRef:
-                name: postgres-secrets
+                name: backend-secrets
           readinessProbe:
             httpGet:
               path: /health
