@@ -8,4 +8,3 @@ data:
   DB_HOST: postgres-service.npvet-k8s.svc.cluster.local
   DB_PORT: "5432"
   DDL: create
-  API_PORT: "8080"
