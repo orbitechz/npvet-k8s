@@ -16,8 +16,8 @@ spec:
               service:
                 name: npvet-backend-service
                 port:
-                  number: 8090
-          - path: /()(.*)
+                  number: 8080
+          - path: /
             pathType: Prefix
             backend:
               service:
