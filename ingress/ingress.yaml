@@ -5,20 +5,21 @@ metadata:
   namespace: npvet-k8s
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
     - host: npvet.local
       http:
         paths:
           - path: /npvet-api(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: npvet-backend-service
                 port:
                   number: 8080
           - path: /
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: npvet-frontend
