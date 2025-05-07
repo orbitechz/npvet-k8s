@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: npvet-api-ingress
+  namespace: npvet-k8s
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: npvet.local
+      http:
+        paths:
+          - path: /npvet-api
+            pathType: Prefix
+            backend:
+              service:
+                name: npvet-backend-service
+                port:
+                  number: 8080

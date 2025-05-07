@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: npvet-frontend
-          image: ghcr.io/orbitechz/npvet-frontend-cloud:main
+          image: ghcr.io/orbitechz/npvet-frontend-cloud:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
