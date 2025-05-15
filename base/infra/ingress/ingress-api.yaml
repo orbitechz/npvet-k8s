@@ -2,8 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: npvet-api-ingress
-  namespace: npvet-k8s
+  namespace: npvet-prod
   annotations:
+    kubernetes.io/ingress.class: "gce"              # usa o controller nativo GCE
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:

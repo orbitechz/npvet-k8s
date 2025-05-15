@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: npvet-frontend
-  namespace: npvet-k8s
+  namespace: npvet-prod
 spec:
   replicas: 2
   selector:
@@ -21,7 +21,7 @@ spec:
             - containerPort: 80
           env:
             - name: BACKEND_URL
-              value: "http://npvet-backend-service.npvet-k8s.svc.cluster.local"
+              value: "http://npvet-backend-service.npvet-prod.svc.cluster.local"
           readinessProbe:
             httpGet:
               path: /

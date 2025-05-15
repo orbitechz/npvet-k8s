@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: npvet-backend-service
-  namespace: npvet-k8s
+  namespace: npvet-prod
 spec:
   selector:
     app: npvet-backend

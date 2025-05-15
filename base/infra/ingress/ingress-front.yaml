@@ -2,7 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: npvet-frontend-ingress
-  namespace: npvet-k8s
+  namespace: npvet-prod
+  annotations:
+    kubernetes.io/ingress.class: "gce" 
 spec:
   rules:
     - host: npvet.local

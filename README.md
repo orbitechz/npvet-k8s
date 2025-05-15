@@ -1,2 +1,2 @@
-# npvet-k8s
+# npvet-prod
 Kubernetes do Npvet.
