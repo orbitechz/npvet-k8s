@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: npvet-frontend-ingress
+  namespace: npvet-staging
+  annotations:
+    networking.gke.io/managed-certificates: npvet-cert-staging
+    kubernetes.io/ingress.global-static-ip-name: "npvet-ip-staging"
+spec:
+  rules:
+    - host: npvet-staging.moschen.dev

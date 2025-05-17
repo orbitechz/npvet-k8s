@@ -1,0 +1,9 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: npvet-cert-prod
+  namespace: npvet-prod
+spec:
+  domains:
+    - npvet.moschen.dev
+  

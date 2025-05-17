@@ -2,10 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: npvet-frontend-ingress
-  namespace: npvet-prod
+  namespace: npvet-dev
   annotations:
     kubernetes.io/ingress.class: "gce" 
+    networking.gke.io/v1beta1-frontend-config: "npvet-frontend-config"
 spec:
+  ingressClassName: gce
   rules:
     - host: npvet.local
       http:
@@ -14,6 +16,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: npvet-frontend
+                name: npvet-frontend-service
                 port:
                   number: 80
+          - path: /npvet-api
+            pathType: Prefix
+            backend:
+              service:
+                name: npvet-backend-service
+                port:
+                  number: 8080

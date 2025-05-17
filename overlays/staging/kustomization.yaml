@@ -8,6 +8,10 @@ resources:
   - ../../base/apps/frontend
   - ../../base/apps/database
   - ../../base/infra/ingress
+  - ./tls/managed-cert.yaml
+
+patchesStrategicMerge:
+  - ingress-patch.yaml
 
 configMapGenerator:
   - name: backend-config

@@ -1,0 +1,9 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: npvet-cert-staging
+  namespace: npvet-staging
+spec:
+  domains:
+    - npvet-staging.moschen.dev
+  
