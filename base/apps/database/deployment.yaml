@@ -1,9 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: postgres-deployment
-  namespace: npvet-dev
+  name: postgres
 spec:
+  serviceName: postgres-service
   replicas: 1
   selector:
     matchLabels:
@@ -13,20 +13,45 @@ spec:
       labels:
         app: postgres
     spec:
+      tolerations:
+        - key: "cloud.google.com/gke-quick-remove"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+        - key: "node.cloudprovider.kubernetes.io/uninitialized"
+          operator: "Exists"
+          effect: "NoExecute"
       containers:
         - name: postgres
           image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: postgres
           envFrom:
             - configMapRef:
                 name: postgres-config
             - secretRef:
                 name: postgres-secrets
-          ports:
-            - containerPort: 5432
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
-            - name: postgres-persistance-storage
+            - name: postgres-data
               mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: postgres-persistance-storage
-          persistentVolumeClaim:
-            claimName: postgres-pv-claim
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "250m"
+              memory: "512Mi"
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi

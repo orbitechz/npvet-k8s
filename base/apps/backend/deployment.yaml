@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: npvet-backend-deployment
-  namespace: npvet-dev
 spec:
   replicas: 2
   selector:
@@ -13,9 +12,20 @@ spec:
       labels:
         app: npvet-backend
     spec:
+      tolerations:
+        - key: "cloud.google.com/gke-quick-remove"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+        - key: "node.cloudprovider.kubernetes.io/uninitialized"
+          operator: "Exists"
+          effect: "NoExecute"
       containers:
         - name: npvet-backend
           image: ghcr.io/orbitechz/npvet-backend-cloud:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -35,3 +45,10 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
             timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "250m"
+              memory: "512Mi"

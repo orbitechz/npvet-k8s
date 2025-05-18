@@ -10,22 +10,37 @@ resources:
   - ../../base/infra/ingress
   - ./tls/managed-cert.yaml
 
-patchesStrategicMerge:
-  - ingress-patch.yaml
-
+patches:
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: npvet-frontend-ingress
+    patch: |-
+      - op: replace
+        path: /metadata/annotations/networking.gke.io~1managed-certificates
+        value: npvet-cert-staging
+      - op: replace
+        path: /metadata/annotations/kubernetes.io~1ingress.global-static-ip-name
+        value: npvet-ip-staging
+      - op: replace
+        path: /spec/rules/0/host
+        value: npvet-staging.moschen.dev
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: backend-config
-    env: backend/backend.env
+    env: backend/backend.properties
   - name: postgres-config
-    env: database/database.env
+    env: database/database.properties
 
 secretGenerator:
   - name: backend-secrets
-    files:
-      - backend/backend.properties
+    envs:
+      - backend/backend.env
   - name: postgres-secrets
-    files:
-      - database/database.properties
+    envs:
+      - database/database.env
 
 images:
   - name: ghcr.io/orbitechz/npvet-backend-cloud
