@@ -10,21 +10,23 @@ on:
   workflow_dispatch:
 
 jobs:
-#========================================
-  # JOB PARA O AMBIENTE DE STAGING (COM DEBUG)
+  #========================================
+  # JOB PARA O AMBIENTE DE STAGING
   #========================================
   deploy-staging:
+    # Este job só executa se o evento for na branch 'staging'
     if: github.ref == 'refs/heads/staging'
     name: 'Deploy to Staging'
     runs-on: ubuntu-latest
+    # Aponta para o ambiente 'staging' para usar os segredos corretos
     environment: staging
 
     permissions:
       contents: read
-      id-token: 'write'
+      id-token: 'write' # Necessário para a action setup-gcloud
 
     steps:
-      - name: Checkout do Repositório
+      - name: Checkout do Repositório da Aplicação.
         uses: actions/checkout@v4
 
       - name: Autenticar no Google Cloud (Staging)
@@ -34,39 +36,23 @@ jobs:
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
-
-      # --- PASSOS DE DEBUG ---
-      - name: 'Debug: Verificar instalação e PATH'
-        run: |
-          echo "--- Versão do GCloud e componentes ---"
-          gcloud --version
-          
-          echo "--- Localização do plugin de autenticação ---"
-          which gke-gcloud-auth-plugin
-          
-          echo "--- Conteúdo da variável PATH ---"
-          echo $PATH
+        
+      - name: Instalar componente gke-gcloud-auth-plugin
+        run: gcloud components install gke-gcloud-auth-plugin
 
       - name: Configurar kubectl para o cluster de Staging
         run: |
+          # Substitua com os dados do seu cluster de staging
           gcloud container clusters get-credentials npvet-staging \
             --zone=us-central1-a \
             --project=mensal-staging
 
-      # --- MAIS PASSOS DE DEBUG ---
-      - name: 'Debug: Inspecionar o kubeconfig gerado'
-        run: |
-          echo "--- Conteúdo do arquivo kubeconfig ---"
-          cat ~/.kube/config
-
       - name: Criar arquivos de configuração para Staging
         run: |
-          # Usando > para criar/sobrescrever o arquivo, em vez de >> (append)
-          # Isso evita que o arquivo cresça a cada execução da pipeline
-          echo "${{ secrets.PROP_BACKEND_STAGING }}" > ./overlays/staging/backend/backend.properties
-          echo "${{ secrets.PROP_DATABASE_STAGING }}" > ./overlays/staging/database/database.properties
-          echo "${{ secrets.ENV_BACKEND_STAGING }}" > ./overlays/staging/backend/backend.env
-          echo "${{ secrets.ENV_DATABASE_STAGING }}" > ./overlays/staging/database/database.env
+          echo "${{ secrets.PROP_BACKEND_STAGING }}" >> ./overlays/staging/backend/backend.properties
+          echo "${{ secrets.PROP_DATABASE_STAGING }}" >> ./overlays/staging/database/database.properties
+          echo "${{ secrets.ENV_BACKEND_STAGING }}" >> ./overlays/staging/backend/backend.env
+          echo "${{ secrets.ENV_DATABASE_STAGING }}" >> ./overlays/staging/database/database.env
 
       - name: Deploy da Aplicação no Staging com Kustomize
         run: kubectl apply -k overlays/staging
