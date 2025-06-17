@@ -23,6 +23,7 @@ jobs:
 
     permissions:
       contents: read
+      id-token: 'write' # Necessário para a action setup-gcloud
 
     steps:
       - name: Checkout do Repositório da Aplicação.
@@ -33,6 +34,9 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY_STAGING }}
 
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
       - name: Configurar kubectl para o cluster de Staging
         run: |
           # Substitua com os dados do seu cluster de staging
@@ -63,6 +67,7 @@ jobs:
 
     permissions:
       contents: read
+      id-token: 'write' # Necessário para a action setup-gcloud
 
     steps:
       - name: Checkout do Repositório da Aplicação
@@ -72,7 +77,9 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY_PRODUCTION }}
-
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        
       - name: Configurar kubectl para o cluster de Produção
         run: |
           # Substitua com os dados do seu cluster de produção
