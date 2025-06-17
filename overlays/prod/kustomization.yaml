@@ -9,7 +9,7 @@ resources:
   - ../../base/apps/database
   - ../../base/infra/ingress
   - ./tls/managed-cert.yaml
-
+  - ./namespace.yaml
 replicas:
   - name: npvet-frontend
     count: 2
