@@ -1,0 +1,77 @@
+# .github/workflows/deploy-application.yml
+
+name: Deploy Aplicação Frontend no GKE
+
+on:
+  push:
+    branches:
+      - staging
+      - main # Usaremos 'main' como a branch de produção
+  workflow_dispatch:
+
+jobs:
+  #========================================
+  # JOB PARA O AMBIENTE DE STAGING
+  #========================================
+  deploy-staging:
+    # Este job só executa se o evento for na branch 'staging'
+    if: github.ref == 'refs/heads/staging'
+    name: 'Deploy to Staging'
+    runs-on: ubuntu-latest
+    # Aponta para o ambiente 'staging' para usar os segredos corretos
+    environment: staging
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout do Repositório da Aplicação
+        uses: actions/checkout@v4
+
+      - name: Autenticar no Google Cloud (Staging)
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY_STAGING }}
+
+      - name: Configurar kubectl para o cluster de Staging
+        run: |
+          # Substitua com os dados do seu cluster de staging
+          gcloud container clusters get-credentials npvet-staging \
+            --zone=us-central1-a \
+            --project=mensal-staging
+
+      - name: Deploy da Aplicação no Staging com Kustomize
+        run: kubectl apply -k overlays/staging
+
+  #========================================
+  # JOB PARA O AMBIENTE DE PRODUÇÃO
+  #========================================
+  deploy-production:
+    # Este job só executa se o evento for na branch 'main'
+    if: github.ref == 'refs/heads/main'
+    name: 'Deploy to Production'
+    runs-on: ubuntu-latest
+    # Aponta para o ambiente 'production' para usar os segredos corretos
+    environment: production
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout do Repositório da Aplicação
+        uses: actions/checkout@v4
+
+      - name: Autenticar no Google Cloud (Production)
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY_PRODUCTION }}
+
+      - name: Configurar kubectl para o cluster de Produção
+        run: |
+          # Substitua com os dados do seu cluster de produção
+          gcloud container clusters get-credentials npvet-prod \
+            --zone=us-east1-b \
+            --project=mensal04
+
+      - name: Deploy da Aplicação na Produção com Kustomize
+        run: kubectl apply -k overlays/prod
