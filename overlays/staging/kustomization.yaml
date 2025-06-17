@@ -44,7 +44,9 @@ secretGenerator:
       - database/database.env
 
 images:
-  - name: us-central1-docker.pkg.dev/mensal-staging/npvet-repo/npvet-backend-cloud
+  - name: us-central1-docker.pkg.dev/mensal04/npvet-repo/npvet-backend-cloud
+    newName: us-central1-docker.pkg.dev/mensal-staging/npvet-repo/npvet-backend-cloud
     newTag: staging
-  - name: us-central1-docker.pkg.dev/mensal-staging/npvet-repo/npvet-frontend-cloud
+  - name: us-central1-docker.pkg.dev/mensal04/npvet-repo/npvet-frontend-cloud
+    newName: us-central1-docker.pkg.dev/mensal-staging/npvet-repo/npvet-frontend-cloud
     newTag: staging
