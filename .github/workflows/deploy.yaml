@@ -25,7 +25,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout do Repositório da Aplicação
+      - name: Checkout do Repositório da Aplicação.
         uses: actions/checkout@v4
 
       - name: Autenticar no Google Cloud (Staging)
