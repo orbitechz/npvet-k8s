@@ -11,8 +11,10 @@ resources:
   - ./tls/managed-cert.yaml
 
 replicas:
-  npvet-frontend: 2
-  npvet-backend-deployment: 2
+  - name: npvet-frontend
+    count: 2
+  - name: npvet-backend-deployment
+    count: 2
 
 patches:
   - target:
