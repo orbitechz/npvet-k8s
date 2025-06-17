@@ -87,7 +87,7 @@ jobs:
         run: |
           # Substitua com os dados do seu cluster de produção
           gcloud container clusters get-credentials npvet-prod \
-            --zone=us-east1-b \
+            --zone=us-central1-a \
             --project=mensal04
 
       - name: Criar arquivos de configuração para Produção
