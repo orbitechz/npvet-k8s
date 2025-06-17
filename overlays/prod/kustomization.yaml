@@ -10,6 +10,10 @@ resources:
   - ../../base/infra/ingress
   - ./tls/managed-cert.yaml
 
+replicas:
+  npvet-frontend: 2
+  npvet-backend-deployment: 2
+
 patches:
   - target:
       group: networking.k8s.io
