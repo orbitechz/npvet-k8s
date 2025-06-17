@@ -40,6 +40,13 @@ jobs:
             --zone=us-central1-a \
             --project=mensal-staging
 
+      - name: Criar arquivos de configuração para Staging
+        run: |
+          echo "${{ secrets.PROP_BACKEND_STAGING }}" > overlays/staging/backend/backend.properties
+          echo "${{ secrets.PROP_DATABASE_STAGING }}" > overlays/staging/database/database.properties
+          echo "${{ secrets.ENV_BACKEND_STAGING }}" > overlays/staging/backend/backend.env
+          echo "${{ secrets.ENV_DATABASE_STAGING }}" > overlays/staging/database/database.env
+
       - name: Deploy da Aplicação no Staging com Kustomize
         run: kubectl apply -k overlays/staging
 
@@ -72,6 +79,13 @@ jobs:
           gcloud container clusters get-credentials npvet-prod \
             --zone=us-east1-b \
             --project=mensal04
+
+      - name: Criar arquivos de configuração para Produção
+        run: |
+          echo "${{ secrets.PROP_BACKEND_PROD }}" > overlays/prod/backend/backend.properties
+          echo "${{ secrets.PROP_DATABASE_PROD }}" > overlays/prod/database/database.properties
+          echo "${{ secrets.ENV_BACKEND_PROD }}" > overlays/prod/backend/backend.env
+          echo "${{ secrets.ENV_DATABASE_PROD }}" > overlays/prod/database/database.env
 
       - name: Deploy da Aplicação na Produção com Kustomize
         run: kubectl apply -k overlays/prod
