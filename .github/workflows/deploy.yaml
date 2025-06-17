@@ -1,6 +1,6 @@
 # .github/workflows/deploy-application.yml
 
-name: Deploy Aplicação Frontend no GKE
+name: Deploy NPVET no GKE
 
 on:
   push:
