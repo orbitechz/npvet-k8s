@@ -43,7 +43,7 @@ secretGenerator:
       - database/database.env
 
 images:
-  - name: ghcr.io/orbitechz/npvet-backend-cloud
+  - name: us-central1-docker.pkg.dev/mensal04/npvet-repo/npvet-frontend-cloud
     newTag: latest
-  - name: ghcr.io/orbitechz/npvet-frontend-cloud
+  - name: us-central1-docker.pkg.dev/mensal04/npvet-repo/npvet-backend-cloud
     newTag: latest
