@@ -4,7 +4,7 @@ metadata:
   name: npvet-frontend
   namespace: npvet-dev
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: npvet-frontend
